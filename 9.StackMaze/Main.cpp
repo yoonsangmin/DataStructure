@@ -2,6 +2,9 @@
 #include "Location2D.h"
 #include "Stack.h"
 
+// Sleep(밀리 세컨드)
+#include <Windows.h>
+
 //// 맵 데이터 선언.
 //const size_t MAZE_SIZE = 6;
 //// 0: 이동 가능.
@@ -60,6 +63,64 @@ bool IsValidLocation(int row, int column)
     return map[row][column] == '0' || map[row][column] == 'e';
 }
 
+// 화면 지우는 함수.
+void ClearScreen()
+{
+    // 커서 정보 설정을 위한 구조체 변수.
+    CONSOLE_CURSOR_INFO info = { };
+    info.dwSize = 1;
+    info.bVisible = FALSE;
+
+    // 콘솔 제어를 위한 핸들(포인터) 가져오기.
+    static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // 커서 가리기.
+    SetConsoleCursorInfo(handle, &info);
+
+    // 화면 좌표 옮기기.
+    SetConsoleCursorPosition(handle, { 0, 0 });
+
+    // 빈 문자 찍기.
+    //for (int y = 0; y < MAZE_SIZE; ++y)
+    //{
+    //    for (int x = 0; x < MAZE_SIZE; ++x)
+    //    {
+    //        std::cout << "  ";
+    //    }
+
+    //    std::cout << "\n";
+    //}
+    SetConsoleCursorPosition(handle, { 0, 0 });
+}
+
+// 맵 출력 함수.
+void PrintLocation(int row, int column, int delay)
+{
+    // 딜레이.
+    Sleep(delay);
+
+    // 화면 지우기.
+    ClearScreen();
+
+    for (int ix = 0; ix < MAZE_SIZE; ++ix)
+    {
+        for (int jx = 0; jx < MAZE_SIZE; ++jx)
+        {
+            if (ix == row && jx == column)
+            {
+                // 현재 방문 중인 위치를 특정 문자로 출력.
+                std::cout << "p ";
+                continue;
+            }
+
+            // 출력.
+            std::cout << map[ix][jx] << " ";
+        }
+
+        std::cout << "\n";
+    }
+}
+
 int main()
 {
     // 시작 위치 검색.
@@ -101,7 +162,8 @@ int main()
 
         // 탐색한 위치 출력.
         //std::cout << "(" << row << "," << column << ") ";
-        std::cout << "(" << column << "," << row << ") ";
+        //std::cout << "(" << column << "," << row << ") ";
+        PrintLocation(row, column, 500);
 
         // 도착했는지 확인.
         if (map[row][column] == 'e')
