@@ -80,6 +80,9 @@ void ClearScreen()
     // 화면 좌표 옮기기.
     SetConsoleCursorPosition(handle, { 0, 0 });
 
+    // 화면 지우기.
+    //system("cls");
+
     // 빈 문자 찍기.
     //for (int y = 0; y < MAZE_SIZE; ++y)
     //{
@@ -153,7 +156,7 @@ int main()
     // 미로 탐색.
     while (!stack.IsEmpty())
     {
-        // 스태 최상위에 있는 위치 반환.
+        // 스택 최상위에 있는 위치 반환.
         Location2D current;
         stack.Pop(current);
 
